@@ -1,6 +1,8 @@
 import React from 'react';
-import { useFormik } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+
+import BaseInput from './base/BaseInput';
 
 const validate = () => {
   return Yup.object({
@@ -14,35 +16,29 @@ const validate = () => {
   })
 };
 
+const handleSubmit = values => {
+  alert(JSON.stringify(values, null, 2));
+};
+
 const SignupForm = () => {
-  const formik = useFormik({
-    initialValues: {
-      firstname: '',
-      lastname: '',
-      email: '',
-    },
-    validationSchema: validate,
-    onSubmit: values => {
-      alert(JSON.stringify(values, null, 2));
-    }
-  });
+  const initialValues = {
+    firstname: '',
+    lastname: '',
+    email: '',
+  };
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <label htmlFor="email">First Name</label>
-      <input id="firstname" type="text" { ...formik.getFieldProps('firstname') } />
-      {formik.touched.firstname && formik.errors.firstname ? (<div>{formik.errors.firstname}</div>) : null}
+    <Formik initialValues={initialValues} validationSchema={validate} onSubmit={handleSubmit} >
+      <Form>
+        <BaseInput label="First Name:" name="firstname" type="text" />
+        <BaseInput label="Last Name:" name="lastname" type="text" />
+        <BaseInput label="Email:" name="email" type="email" />
 
-      <label htmlFor="email">Last Name</label>
-      <input id="lastname" type="text" { ...formik.getFieldProps('lastname') } />
-      {formik.touched.lastname && formik.errors.lastname ? (<div>{formik.errors.lastname}</div>) : null}
-
-      <label htmlFor="email">Email Address</label>
-      <input id="email" type="email" { ...formik.getFieldProps('email') } />
-      {formik.touched.email && formik.errors.email ? (<div>{formik.errors.email}</div>) : null}
-
-      <button type="submit">Submit</button>
-    </form>
+        <div>
+          <button type="submit">Submit</button>
+        </div>
+      </Form>
+    </Formik>
   );
 };
 
