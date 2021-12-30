@@ -3,6 +3,8 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import BaseInput from './base/BaseInput';
+import BaseCheckbox from './base/BaseCheckbox';
+import BaseSelect from './base/BaseSelect';
 
 const validate = () => {
   return Yup.object({
@@ -13,6 +15,12 @@ const validate = () => {
       .max(20, 'The Lastname must be at least 20 characters or less')
       .required('The Lastname is Required'),
     email: Yup.string().email('Invalid email address').required('The Email is Required'),
+    acceptedTerms: Yup.boolean()
+      .required('This field is required')
+      .oneOf([true], 'You must accept the terms and conditions.'),
+    jobType: Yup.string()
+      .oneOf(['designer', 'development', 'product', 'other'], 'Invalid job type.')
+      .required('The job type is required.'),
   })
 };
 
@@ -25,6 +33,8 @@ const SignupForm = () => {
     firstname: '',
     lastname: '',
     email: '',
+    acceptedTerms: false,
+    jobType: '',
   };
 
   return (
@@ -33,6 +43,18 @@ const SignupForm = () => {
         <BaseInput label="First Name:" name="firstname" type="text" />
         <BaseInput label="Last Name:" name="lastname" type="text" />
         <BaseInput label="Email:" name="email" type="email" />
+
+        <BaseSelect label="Job Type:" name="jobType">
+          <option value="">Select a job type</option>
+          <option value="designer">Designer</option>
+          <option value="development">Developer</option>
+          <option value="product">Product Manager</option>
+          <option value="other">Other</option>
+        </BaseSelect>
+
+        <BaseCheckbox name="acceptedTerms">
+          I accept terms and conditions
+        </BaseCheckbox>
 
         <div>
           <button type="submit">Submit</button>
